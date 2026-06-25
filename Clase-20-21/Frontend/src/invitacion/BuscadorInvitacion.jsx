@@ -98,7 +98,7 @@ export const BuscadorInvitacion = ({ workspaceId }) => {
                     backgroundColor: 'var(--bg-input)',
                     border: '1px solid var(--borde)',
                     borderRadius: '8px',
-                    marginTop: '10px'
+                     marginTop: '10px'
                 }}>
                     <div>
                         <p style={{ margin: 0, fontWeight: 'bold', color: 'var(--texto-principal)' }}>{usuarioEncontrado.nombre}</p>
