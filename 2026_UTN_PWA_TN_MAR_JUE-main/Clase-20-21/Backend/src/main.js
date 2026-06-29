@@ -61,7 +61,14 @@ app.use(cors())
 
 // Parse JSON
 app.use(express.json());
-
+app.get('/', (req, res) => {
+    return res.status(200).json({
+        ok: true,
+        message: "¡Servidor corriendo con éxito en Vercel!",
+        environment: process.env.NODE_ENV || "production",
+        timestamp: new Date()
+    });
+});
 app.use('/api/auth', authRouter);
 app.use('/api/workspace', workspaceRouter)
 app.use('/api/workspace', chatRouter)
