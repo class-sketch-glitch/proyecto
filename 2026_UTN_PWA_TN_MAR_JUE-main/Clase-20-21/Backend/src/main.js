@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+dotenv.config();
 
 import ENVIRONMENT from "./config/environment.config.js";
 import connectMongoDB from "./config/mongodb.config.js";
@@ -12,7 +13,7 @@ import authService from "./services/auth.service.js";
 import workspaceRouter from "./routes/workspace.router.js";
 import Email_verificador from "./controllers/Email_verificador.js"
 import mail_verificacion from "./controllers/mail_verificacion.js"
-dotenv.config()
+
 if(ENVIRONMENT.MODE === 'development'){
     dns.setServers(['8.8.8.8', '8.8.4.4']);
 }
@@ -54,7 +55,7 @@ import chatRouter from './routes/chat.router.js';
 
 
 const app = express();
-const PORT = ENVIRONMENT.PORT;
+const PORT = process.env.PORT || ENVIRONMENT.PORT || 3000;
 
 // Habilitamos las consultas cross-origin
 app.use(cors())
