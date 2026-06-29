@@ -1,6 +1,6 @@
 import asyncHandler from '../helpers/asyncHandler.js'
 
-const BASE_URL = 'http://localhost:8080/api'
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
 
 async function _httpClient(endpoint, { method = 'GET', body, token } = {}) {
   const headers = { 'Content-Type': 'application/json' }
