@@ -1,0 +1,2 @@
+-- Desarrollar el codigo SQL para crear la tabla de mensajes_canal 
+CREATE TABLE mensajes_canales( id INT AUTO_INCREMENT PRIMARY KEY, contenido TEXT(3000) NOT NULL, fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, fk_id_canal INT NOT NULL, fk_id_miembro_workspace INT NOT NULL, CONSTRAINT fk_id_canal_canales FOREIGN KEY (fk_id_canal) REFERENCES canales(id) ON DELETE CASCADE, CONSTRAINT fk_id_miembro_workspace_miembros_workspace FOREIGN KEY (fk_id_miembro_workspace) REFERENCES miembros_workspace(id) ON DELETE CASCADE );
