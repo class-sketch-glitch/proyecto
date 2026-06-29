@@ -154,9 +154,16 @@ app.delete(
 
 app.use(errorHandler)
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// Exportar para Vercel serverless
+export default app;
+
+// Solo escuchar en desarrollo local (no en Vercel)
+if (process.env.NODE_ENV !== 'production' || process.env.VERCEL !== '1') {
+  const PORT = process.env.PORT || ENVIRONMENT.PORT || 3000;
+  app.listen(PORT, () => {
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  });
+};
 
 
 /* 
