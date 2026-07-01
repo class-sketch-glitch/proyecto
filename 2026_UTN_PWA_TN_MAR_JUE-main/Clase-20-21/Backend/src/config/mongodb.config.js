@@ -1,29 +1,42 @@
 import mongoose from "mongoose"
 import { ENVIRONMENT } from "./environment.config.js"
-// Corregido: Si en tu archivo pusiste 'export const ENVIRONMENT', acá va con llaves {}
 import dotenv from 'dotenv'
 
-//Lee el archivo .env e inyecta las variables de entorno dentro de process.env
 dotenv.config()
 
 const connectMongoDB = async () => {
     try {
-        // Alertas en consola por si te falta configurar alguna variable en el .env
-        if (!ENVIRONMENT.MONGO_DB_CONNECTION_STRING) {
-            throw new Error("Falta la variable MONGO_DB_CONNECTION_STRING en el entorno.");
+        // Prioridad 1: Atlas (producción/Vercel) - MONGO_ATLAS_URI
+        // Prioridad 2: Local (desarrollo) - MONGO_DB_CONNECTION_STRING
+        const atlasUri = process.env.MONGO_ATLAS_URI
+        const localUri = ENVIRONMENT.MONGO_DB_CONNECTION_STRING
+        const dbName = ENVIRONMENT.MONGO_DB_NAME || 'email_confirmacion'
+
+        let connectionString = ''
+
+        if (atlasUri) {
+            // Atlas: la URI ya incluye la DB, solo agregar si no la tiene
+            connectionString = atlasUri.includes('mongodb.net/') && !atlasUri.includes('mongodb.net/?') 
+                ? `${atlasUri}/${dbName}?retryWrites=true&w=majority`
+                : atlasUri
+            console.log("🔌 Conectando a MongoDB Atlas...")
+        } else if (localUri) {
+            // Local: formato mongodb://host:port/dbname
+            connectionString = `${localUri}/${dbName}`
+            console.log("🔌 Conectando a MongoDB Local...")
+        } else {
+            throw new Error("Falta MONGO_ATLAS_URI (producción) o MONGO_DB_CONNECTION_STRING (local)")
         }
 
-        // Armamos la URL limpia
-        const connectionString = `${ENVIRONMENT.MONGO_DB_CONNECTION_STRING}/${ENVIRONMENT.MONGO_DB_NAME || ''}`;
-        
-        console.log("Intentando conectar a:", connectionString); // Esto te va a ayudar a ver si se arma bien
-
-        await mongoose.connect(connectionString);
-        
-        console.log("¡La conexión con MongoDB funciona correctamente! 🚀");
+        await mongoose.connect(connectionString)
+        console.log("✅ ¡Conexión a MongoDB exitosa!")
     }
     catch (error) {
-        console.error("Hubo un fallo en la conexión de la DB:", error.message);
+        console.error("❌ Error conectando a MongoDB:", error.message)
+        // En Vercel no crashear el proceso, solo logear
+        if (process.env.VERCEL !== '1') {
+            process.exit(1)
+        }
     }
 }
 
