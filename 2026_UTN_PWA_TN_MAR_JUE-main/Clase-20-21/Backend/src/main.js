@@ -6,18 +6,18 @@ import connectMongoDB from "./config/mongodb.config.js";
 import express from "express";
 import cors from 'cors';
 
-
 import dns from 'dns';
 import authRouter from "./routes/auth.router.js";
-import authMiddleware from "./middlewares/auth.middleware.js";
-import authService from "./services/auth.service.js";
 import workspaceRouter from "./routes/workspace.router.js";
 import chatRouter from "./routes/chat.router.js";
 import resetPassword_Router from './controllers/resetPassword_Router.js';
 import errorHandler from './middlewares/errorHandler.middleware.js';
 import asyncHandler from './helpers/asyncHandler.js';
-import Email_verificador from "./controllers/Email_verificador.js"
-import mail_verificacion from "./controllers/mail_verificacion.js"
+import Email_verificador from "./controllers/Email_verificador.js";
+import mail_invitacion from "./controllers/mail_invitacion.js";
+import mail_verificacion from "./controllers/mail_verificacion.js";
+import authMiddleware from "./middlewares/auth.middleware.js";
+import authService from "./services/auth.service.js";
 
 if(ENVIRONMENT.MODE === 'development'){
     dns.setServers(['8.8.8.8', '8.8.4.4']);
@@ -25,11 +25,7 @@ if(ENVIRONMENT.MODE === 'development'){
 
 connectMongoDB()
 
-
-
-
 const app = express();
-const PORT = process.env.PORT || ENVIRONMENT.PORT || 3000;
 
 // Habilitamos las consultas cross-origin
 app.use(cors())
@@ -45,16 +41,12 @@ app.get('/', (req, res) => {
     });
 });
 app.use('/api/auth', authRouter);
-app.use('/api/workspace', workspaceRouter)
-app.use('/api/workspace', chatRouter)
-app.use('/api/auth/forgot-password',Email_verificador)
+app.use('/api/workspace', workspaceRouter);
+app.use('/api/workspace', chatRouter);
+app.use('/api/auth/forgot-password',Email_verificador);
 app.use('/api/auth/reset-password', resetPassword_Router);
 app.use('/api/auth/email_invitacion',mail_invitacion);
 app.use('/api/auth/mail_verificacion', mail_verificacion);
-
-
-
-
 
 app.get(
     '/api/profile', 
@@ -85,10 +77,8 @@ export default app;
 
 // Solo escuchar en desarrollo local (no en Vercel)
 if (process.env.NODE_ENV !== 'production' || process.env.VERCEL !== '1') {
-  const PORT = process.env.PORT || ENVIRONMENT.PORT || 3000;
-  app.listen(PORT, () => {
-      console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  });
-};
-
-
+    const PORT = process.env.PORT || ENVIRONMENT.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+}
