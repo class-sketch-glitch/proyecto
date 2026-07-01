@@ -12,6 +12,10 @@ import authRouter from "./routes/auth.router.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import authService from "./services/auth.service.js";
 import workspaceRouter from "./routes/workspace.router.js";
+import chatRouter from "./routes/chat.router.js";
+import resetPassword_Router from './controllers/resetPassword_Router.js';
+import errorHandler from './middlewares/errorHandler.middleware.js';
+import asyncHandler from './helpers/asyncHandler.js';
 import Email_verificador from "./controllers/Email_verificador.js"
 import mail_verificacion from "./controllers/mail_verificacion.js"
 
