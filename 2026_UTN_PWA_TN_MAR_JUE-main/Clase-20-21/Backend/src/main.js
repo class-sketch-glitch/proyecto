@@ -4,6 +4,7 @@ dotenv.config();
 import ENVIRONMENT from "./config/environment.config.js";
 import connectMongoDB from "./config/mongodb.config.js";
 import express from "express";
+import cors from 'cors';
 
 
 import dns from 'dns';
@@ -27,7 +28,7 @@ const app = express();
 const PORT = process.env.PORT || ENVIRONMENT.PORT || 3000;
 
 // Habilitamos las consultas cross-origin
-app.use(cors())
+app.use(corss())
 
 // Parse JSON
 app.use(express.json());
