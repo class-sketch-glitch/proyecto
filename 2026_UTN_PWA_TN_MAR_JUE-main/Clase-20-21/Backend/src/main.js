@@ -28,7 +28,7 @@ const app = express();
 const PORT = process.env.PORT || ENVIRONMENT.PORT || 3000;
 
 // Habilitamos las consultas cross-origin
-app.use(corss())
+app.use(cors())
 
 // Parse JSON
 app.use(express.json());
